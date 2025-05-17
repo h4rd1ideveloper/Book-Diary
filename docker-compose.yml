@@ -1,0 +1,23 @@
+services:
+  db:
+    image: postgres
+    env_file: .env
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: book-diary-api:latest
+    env_file: .env
+    depends_on:
+      - db
+    ports:
+      - '3000:3000'
+    command: ["npm", "run", "start:prod"]  # vai executar node dist/main.js
+
+volumes:
+  db_data:
